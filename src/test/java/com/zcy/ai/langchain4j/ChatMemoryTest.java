@@ -68,8 +68,10 @@ public class ChatMemoryTest {
     public void testChatMemory4() {
         String message1 = memoryChatAssistant.chat("我是张草原");
         System.out.println(message1);
-        String message2 = memoryChatAssistant.chat("我是谁?");
+        String message2 = memoryChatAssistant.chat("我今年24了");
         System.out.println(message2);
+        String message3 = memoryChatAssistant.chat("你知道我是谁吗？我多大了？");
+        System.out.println(message3);
     }
 
     @Autowired
@@ -92,7 +94,23 @@ public class ChatMemoryTest {
 
     @Test
     public void testChatMemory6() {
-        String message1 = separateChatAssistant2.chat(1,"气象GIS场景展示");
+        String message1 = separateChatAssistant2.chat(1,"现在几点了");
+        System.out.println(message1);
+    }
+
+    @Test
+    public void testChatV() {
+        String message1 = separateChatAssistant2.chat2(1,"我是张草原");
+        System.out.println(message1);
+
+        String message2 = separateChatAssistant2.chat2(1,"我是谁？");
+        System.out.println(message2);
+    }
+
+    @Test
+    public void testUserInfoChat() {
+        // 从数据中获取用户信息
+        String message1 = separateChatAssistant2.chat3(1,"我是谁？我多大了？","熊大",18);
         System.out.println(message1);
     }
 }

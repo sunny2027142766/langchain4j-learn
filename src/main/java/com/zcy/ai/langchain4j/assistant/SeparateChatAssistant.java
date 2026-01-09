@@ -1,59 +1,39 @@
 package com.zcy.ai.langchain4j.assistant;
 
+import dev.langchain4j.model.openai.OpenAiStreamingChatModel;
 import dev.langchain4j.service.MemoryId;
 import dev.langchain4j.service.SystemMessage;
 import dev.langchain4j.service.UserMessage;
+import dev.langchain4j.service.V;
 import dev.langchain4j.service.spring.AiService;
 import dev.langchain4j.service.spring.AiServiceWiringMode;
+import reactor.core.publisher.Flux;
 
 @AiService(
         wiringMode = AiServiceWiringMode.EXPLICIT,
-        chatModel = "openAiChatModel",
+        streamingChatModel = "openAiStreamingChatModel",
         chatMemoryProvider = "chatMemoryProvider"
+//        tools = "calculatorTools"
 )
 public interface SeparateChatAssistant {
-
-    @SystemMessage("""
-            # 角色:Mermaid图表代码生成器
-
-## 背景:需要根据用户的流程描述,自动生成Mermaid图表代码
-
-## 注意事项:生成的代码要符合Mermaid语法,准确表达用户需求
-
-## 技能:
-- 熟悉Mermaid支持的图表类型和语法
-- 善于将流程描述转换为结构化的图表代码
-- 了解流程、架构、结构化分析等领域知识
-
-## 目标:
-- 收集用户对流程、架构等的描述
-- 将描述转换为对应Mermaid图表代码
-
-## 约束:
-- 生成代码遵循Mermaid语法
-- 流程语义表达准确
-- 代码整洁格式规范
-
-## 工作流程:
-1. 询问用户需绘制什么类型的图表
-2. 收集用户对流程、架构等的描述
-3. 分析描述,设计图表结构和元素
-4. 根据结构生成正确的Mermaid图表代码
-5. 验证代码语法并修正错误
-6. 输出代码给用户使用
-
-## 输出格式:
-```mermaid
-图表代码
-```
-
-## 建议:
-- 与用户确认图表表达是否准确
-- 复查Mermaid语法避免错误
-- 测试代码确保可以正确渲染
-
-## 初始化:
-您好,很高兴为您自动生成Mermaid图表代码。请告诉我您想生成什么类型的图表,以及相应的流程描述。我将负责转换为标准的Mermaid代码。如果有任何需要调整的地方,请务必提出,让我们一起优化生成的图表代码。
-            """)
+    //    @SystemMessage("用河南话回答,今天是{{current_date_time}}")
+    @SystemMessage(fromResource = "prompt.template.txt")
     String chat(@MemoryId int memoryId, @UserMessage String userMessage);
+
+    @UserMessage("你是我河南的好朋友。用河南话回答，增加语气词,{{userMessage}}")
+    String chat2(@MemoryId int memoryId, @V("userMessage") String userMessage);
+
+    @SystemMessage(fromResource = "prompt.system.template.txt")
+    String chat3(
+            @MemoryId int memoryId,
+            @UserMessage String userMessage,
+            @V("username") String username,
+            @V("age") int age
+    );
+
+    @SystemMessage(fromResource = "prompt.agent.template.txt")
+    Flux<String> agentChat(
+            @MemoryId Long memoryId,
+            @UserMessage String userMessage
+    );
 }
