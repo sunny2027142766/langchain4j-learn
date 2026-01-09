@@ -2,7 +2,6 @@ package com.zcy.ai.langchain4j.controller;
 
 import com.zcy.ai.langchain4j.assistant.SeparateChatAssistant;
 import com.zcy.ai.langchain4j.bean.ChatForm;
-import dev.langchain4j.model.openai.OpenAiStreamingChatModel;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
